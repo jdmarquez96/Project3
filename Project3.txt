@@ -1,0 +1,43 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import math 
+from scipy.optimize import curve_fit as fit
+
+#data of the 1s upsilon and 2s upsilon
+m0 = 9450 #MeV
+s0 = 0.054 #MeV
+
+
+Nexp = 10000
+#Nmeas = 1000
+detector = 200
+#alpha = 0.05
+
+
+
+
+def h0(sigdetector):
+        mu = np.random.normal(m0, s0) #true measurements
+        x0 = np.random.normal(mu,sigdetector) #detector measurements
+        return x0 
+
+
+x0list = [] #generating random x cooridantes for H0
+for i in range(1, Nexp):
+        y0 = h0(detector)
+        x0list.append(y0)
+
+n0, bin0, _ = plt.hist(x0list, 50)
+
+
+
+
+def gauss( x, a,  mean, sigma):
+	return a*np.exp(  -(x - mean)**2/(2*sigma**2))
+
+
+bin = bin0[:-1]
+
+bestfit = fit(gauss, bin, n0)
+#print(bestfit)
+#guess
